@@ -7,6 +7,8 @@ import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import './static/css/styles.css';
 import Login from "./components/pages/Login";
 import Main from "./components/pages/Main";
+import Register from "./components/pages/Register";
+import Profile from "./components/pages/Profile";
 
 function App() {
     const [fullPageMode, setFullPageMode] = useState(false);
@@ -14,7 +16,7 @@ function App() {
             <BasePage>
                 <Header></Header>
                 <Body fullPageMode={fullPageMode} setFullPageMode={setFullPageMode}>
-                    <Main/>
+                    <Profile/>
                 </Body>
                 <Footer></Footer>
             </BasePage>
