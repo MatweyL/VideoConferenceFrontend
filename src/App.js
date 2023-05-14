@@ -6,6 +6,7 @@ import Footer from "./components/layouts/Footer";
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import './static/css/styles.css';
 import Login from "./components/pages/Login";
+import Main from "./components/pages/Main";
 
 function App() {
     const [fullPageMode, setFullPageMode] = useState(false);
@@ -13,7 +14,7 @@ function App() {
             <BasePage>
                 <Header></Header>
                 <Body fullPageMode={fullPageMode} setFullPageMode={setFullPageMode}>
-                    <Login/>
+                    <Main/>
                 </Body>
                 <Footer></Footer>
             </BasePage>

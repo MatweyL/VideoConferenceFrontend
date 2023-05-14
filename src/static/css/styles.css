@@ -12,3 +12,10 @@
     width: 38px;
     height: auto;
 }
+
+.main-image {
+    object-fit: cover;
+    width: 30%;
+    height: auto;
+    margin: 10px;
+}
