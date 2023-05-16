@@ -1,5 +1,6 @@
 import React from 'react';
 import logo from '../../static/images/logo_blue.png'
+import {Link} from "react-router-dom";
 
 const Header = (props) => {
     return (
@@ -11,16 +12,13 @@ const Header = (props) => {
                     </a>
 
                     <ul className="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                        <li><a href="\#" className="nav-link px-2 text-white">Профиль</a></li>
-                        <li><a href="\#" className="nav-link px-2 text-white">Конференции</a></li>
-                        {/*<li><a href="\#" className="nav-link px-2 text-white">Pricing</a></li>*/}
-                        {/*<li><a href="\#" className="nav-link px-2 text-white">FAQs</a></li>*/}
-                        {/*<li><a href="\#" className="nav-link px-2 text-white">About</a></li>*/}
+                        <li><Link className="nav-link px-2 text-white" to="/profile">Профиль</Link></li>
+                        <li><Link className="nav-link px-2 text-white" to="/conferences">Конференции</Link></li>
                     </ul>
 
                     <div className="text-end">
-                        <button type="button" className="btn btn-outline-light me-2">Login</button>
-                        <button type="button" className="btn btn-info">Sign-up</button>
+                        <Link to="/login" className="btn btn-outline-light me-2">Login</Link>
+                        <Link to="/register" className="btn btn-info">Sign-up</Link>
                     </div>
                 </div>
             </div>

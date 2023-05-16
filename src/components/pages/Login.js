@@ -1,10 +1,12 @@
-import React from 'react';
+import React, {useState} from 'react';
 import CenteredBlock from "../base/CenteredBlock";
 import Wrapper from "../base/Wrapper";
 import PageTitle from "../base/PageTitle";
 
 const Login = (props) => {
     const pageTitle = `Вход в ${process.env.REACT_APP_SITE_NAME}`;
+    const [username, setUsername] = useState();
+    const [password, setPassword] = useState();
     return (
         <Wrapper>
             <PageTitle title={pageTitle}/>

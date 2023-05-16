@@ -1,7 +1,9 @@
 import React from 'react';
 
-const Body = ({fullPageMode, setFullPageMode, ...props}) => {
-    const bodyClassName = (fullPageMode ? "" : "container") + " body";
+const Body = ({fullPageMode = true, fullWidthMode, ...props}) => {
+    const widthStyle = fullWidthMode ? " " : " container ";
+    const heightStyle = fullPageMode ? " body " : " ";
+    const bodyClassName = widthStyle + heightStyle;
     return (
         <div className={bodyClassName}>
             {props.children}

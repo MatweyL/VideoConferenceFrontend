@@ -1,6 +1,6 @@
 import React from "react";
 
-const LabeledInput = ({type, placeholder, inputLabel, value, readOnly, ...props}) => {
+const LabeledInput = ({type, placeholder, inputLabel, value, readOnly, onChangeHandler, ...props}) => {
 
     return (
         <div className="input col-md-12">
@@ -10,6 +10,7 @@ const LabeledInput = ({type, placeholder, inputLabel, value, readOnly, ...props}
                    placeholder={placeholder}
                    defaultValue={value}
                    readOnly={readOnly}
+                   onChange={onChangeHandler}
             />
         </div>
     );
