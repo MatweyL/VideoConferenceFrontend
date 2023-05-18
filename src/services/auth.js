@@ -24,7 +24,20 @@ const authUser = (user) => {
 }
 
 const registerUser = (user) => {
-
+    return fetch(`${API_URL}/users/register`, {
+        method: "POST",
+        body: JSON.stringify(user),
+        headers: {
+            "Content-Type": "application/json"
+        },
+    }).then(response => {
+        if (response.status === 201) {
+            return response.json().then(data => {
+                return data;
+            })
+        }
+        return getAPIError(response.status, response.detail)
+    });
 }
 
 function isUserAuthenticated() {

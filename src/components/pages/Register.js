@@ -1,10 +1,34 @@
-import React from 'react';
+import React, {useState} from 'react';
 import CenteredBlock from "../base/CenteredBlock";
 import Wrapper from "../base/Wrapper";
 import PageTitle from "../base/PageTitle";
+import {Link} from "react-router-dom";
+import {registerUser} from "../../services/auth";
 
 const Register = (props) => {
+    const [username, setUsername] = useState();
+    const [password, setPassword] = useState();
+    const [passwordConfirmation, setPasswordConfirmation] = useState();
     const pageTitle = `Создание аккаунта в ${process.env.REACT_APP_SITE_NAME}`;
+
+    function regUser() {
+        if (password !== passwordConfirmation) {
+            alert("Пароли должны совпадать!")
+        } else {
+            registerUser({username: username, password: password}).then(response => {
+                if (response.error) {
+                    if (response.statusCode === 409) {
+                        alert("Выберете другое имя пользователя");
+                    } else {
+                        alert("Некорректные входные данные")
+                    }
+                } else {
+                    window.location.replace("/login");
+                }
+            })
+        }
+    }
+
     return (
         <Wrapper>
             <PageTitle title={pageTitle}/>
@@ -12,24 +36,24 @@ const Register = (props) => {
                 <form className="col-lg-6 col-md-6">
                     <div className="form-outline mb-4">
                         <label className="form-label" htmlFor="username">Имя пользователя</label>
-                        <input type="text" id="username" className="form-control" defaultValue="user" placeholder="Username "/>
+                        <input onChange={e => setUsername(e.target.value)} type="text" id="username" className="form-control" placeholder="Username "/>
                     </div>
 
                     <div className="form-outline mb-4">
                         <label className="form-label" htmlFor="password">Пароль</label>
-                        <input type="password" id="password" className="form-control" defaultValue="user" placeholder="Password"/>
+                        <input onChange={e => setPassword(e.target.value)} type="password" id="password" className="form-control" placeholder="Password"/>
                     </div>
 
                     <div className="form-outline mb-4">
                         <label className="form-label" htmlFor="password_confirmation">Пароль (повторно)</label>
-                        <input type="password" id="password_confirmation" className="form-control" defaultValue="user" placeholder="Password"/>
+                        <input onChange={e => setPasswordConfirmation(e.target.value)} type="password" id="password_confirmation" className="form-control" placeholder="Password"/>
                     </div>
 
 
                     <div className="text-center">
-                        <button type="button" className="btn btn-primary btn-block mb-4">Создать аккаунт</button>
+                        <button onClick={regUser} type="button" className="btn btn-primary btn-block mb-4">Создать аккаунт</button>
 
-                        <p>Есть аккаунт? <a href="/#">Войти</a></p>
+                        <p>Есть аккаунт? <Link href="/login">Войти</Link></p>
                     </div>
                 </form>
             </CenteredBlock>
