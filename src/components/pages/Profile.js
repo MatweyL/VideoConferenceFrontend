@@ -6,6 +6,10 @@ import LabeledInput from "../base/LabeledInput";
 import ReadOnlyInput from "../base/ReadOnlyInput";
 import {getCurrentUser, getUser, updateUser} from "../../services/user";
 import NotFoundPage from "./NotFoundPage";
+import Body from "../layouts/Body";
+import BasePage from "../layouts/BasePage";
+import Header from "../layouts/Header";
+import Footer from "../layouts/Footer";
 
 const Profile = (props) => {
     const pageTitle = `Профиль`;
@@ -50,26 +54,30 @@ const Profile = (props) => {
     }
 
     return (
-        <Wrapper>
-            <PageTitle title={pageTitle}/>
-            <CenteredBlock>
-                <div className="border">
-                    <div className="col p-3">
-                        <ReadOnlyInput title="Username" value={username}/>
-                        <LabeledInput inputLabel="Имя" readOnly={readOnlyMode} onChangeHandler={updateFirstName} value={firstName}/>
-                        <LabeledInput inputLabel="Фамилия" readOnly={readOnlyMode} onChangeHandler={updateLastName} value={lastName}/>
-                        <CenteredBlock>
-                            {readOnlyMode ?
-                                <button onClick={enableUpdateProfile} className="btn btn-primary m-4" type="button">Редактировать</button>
-                                :
-                                <button onClick={saveUpdateProfile} className="btn btn-primary m-4" type="button">Сохранить</button>}
+        <BasePage>
+            <Header></Header>
+            <Body>
+                <PageTitle title={pageTitle}/>
+                <CenteredBlock>
+                    <div className="border">
+                        <div className="col p-3">
+                            <ReadOnlyInput title="Username" value={username}/>
+                            <LabeledInput inputLabel="Имя" readOnly={readOnlyMode} onChangeHandler={updateFirstName} value={firstName}/>
+                            <LabeledInput inputLabel="Фамилия" readOnly={readOnlyMode} onChangeHandler={updateLastName} value={lastName}/>
+                            <CenteredBlock>
+                                {readOnlyMode ?
+                                    <button onClick={enableUpdateProfile} className="btn btn-primary m-4" type="button">Редактировать</button>
+                                    :
+                                    <button onClick={saveUpdateProfile} className="btn btn-primary m-4" type="button">Сохранить</button>}
 
-                        </CenteredBlock>
+                            </CenteredBlock>
+                        </div>
                     </div>
-                </div>
 
-            </CenteredBlock>
-        </Wrapper>
+                </CenteredBlock>
+            </Body>
+            <Footer></Footer>
+        </BasePage>
     );
 }
 

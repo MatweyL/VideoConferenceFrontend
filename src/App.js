@@ -10,15 +10,9 @@ import HeaderRoutes from "./routes/HeaderRoutes";
 
 function App() {
     return (
-            <BasePage>
-                <Router>
-                    <Header></Header>
-                    <Body>
-                        <HeaderRoutes></HeaderRoutes>
-                    </Body>
-                    <Footer></Footer>
-                </Router>
-            </BasePage>
+            <Router>
+                <HeaderRoutes></HeaderRoutes>
+            </Router>
         );
 }
 

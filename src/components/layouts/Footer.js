@@ -3,15 +3,16 @@ import logo from '../../static/images/logo_black.png';
 import github from '../../static/images/github.png';
 import vk from '../../static/images/vk.png';
 import telegram from '../../static/images/telegram.png';
+import {Link} from "react-router-dom";
 
 const Footer = (props) => {
     return (
         <div className="container">
             <footer className="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
                 <div className="col-md-4 d-flex align-items-center">
-                    <a href="/" className="mb-3 me-2 mb-md-0 text-muted text-decoration-none lh-1">
+                    <Link to="/" className="mb-3 me-2 mb-md-0 text-muted text-decoration-none lh-1">
                         <img className="footer-icon" src={logo} alt="logo"/>
-                    </a>
+                    </Link>
                     <span className="text-muted">© 2023 {process.env.REACT_APP_SITE_NAME}</span>
                 </div>
 

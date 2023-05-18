@@ -4,6 +4,10 @@ import Wrapper from "../base/Wrapper";
 import PageTitle from "../base/PageTitle";
 import {Link} from "react-router-dom";
 import {registerUser} from "../../services/auth";
+import Body from "../layouts/Body";
+import Header from "../layouts/Header";
+import BasePage from "../layouts/BasePage";
+import Footer from "../layouts/Footer";
 
 const Register = (props) => {
     const [username, setUsername] = useState();
@@ -30,7 +34,9 @@ const Register = (props) => {
     }
 
     return (
-        <Wrapper>
+        <BasePage>
+        <Header></Header>
+        <Body>
             <PageTitle title={pageTitle}/>
             <CenteredBlock>
                 <form className="col-lg-6 col-md-6">
@@ -57,7 +63,9 @@ const Register = (props) => {
                     </div>
                 </form>
             </CenteredBlock>
-        </Wrapper>
+        </Body>
+            <Footer></Footer>
+        </BasePage>
     );
 }
 

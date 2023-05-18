@@ -1,9 +1,12 @@
 import React from 'react';
 import Wrapper from "../base/Wrapper";
+import Body from "../layouts/Body";
+import Header from "../layouts/Header";
+import BasePage from "../layouts/BasePage";
 
 const Conference = (props) => {
     return (
-        <Wrapper>
+        <Body fullPageMode={true} fullWidthMode={true}>
             <div id="video_grid" className="video-grid">
                 <div className="video-wrapper">
                     <div className="video-username">You</div>
@@ -19,7 +22,7 @@ const Conference = (props) => {
                 </div>
             </div>
 
-        </Wrapper>
+        </Body>
     );
 }
 

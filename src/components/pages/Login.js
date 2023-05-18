@@ -5,6 +5,10 @@ import PageTitle from "../base/PageTitle";
 import {Link} from "react-router-dom";
 import {authUser} from "../../services/auth";
 import {setToken} from "../../services/utils";
+import Body from "../layouts/Body";
+import BasePage from "../layouts/BasePage";
+import Header from "../layouts/Header";
+import Footer from "../layouts/Footer";
 
 const Login = (props) => {
     const pageTitle = `Вход в ${process.env.REACT_APP_SITE_NAME}`;
@@ -33,29 +37,33 @@ const Login = (props) => {
 
 
     return (
-        <Wrapper>
-            <PageTitle title={pageTitle}/>
-            <CenteredBlock>
-                <form className="col-lg-6 col-md-6">
-                    <div className="form-outline mb-4">
-                        <label className="form-label" htmlFor="username">Имя пользователя</label>
-                        <input onChange={updateUsername} type="text" id="username" className="form-control" placeholder="Username "/>
-                    </div>
+        <BasePage>
+            <Header></Header>
+            <Body>
+                <PageTitle title={pageTitle}/>
+                <CenteredBlock>
+                    <form className="col-lg-6 col-md-6">
+                        <div className="form-outline mb-4">
+                            <label className="form-label" htmlFor="username">Имя пользователя</label>
+                            <input onChange={updateUsername} type="text" id="username" className="form-control" placeholder="Username "/>
+                        </div>
 
-                    <div className="form-outline mb-4">
-                        <label className="form-label" htmlFor="password">Пароль</label>
-                        <input onChange={updatePassword} type="password" id="password" className="form-control" placeholder="Password"/>
-                    </div>
+                        <div className="form-outline mb-4">
+                            <label className="form-label" htmlFor="password">Пароль</label>
+                            <input onChange={updatePassword} type="password" id="password" className="form-control" placeholder="Password"/>
+                        </div>
 
 
-                    <div className="text-center">
-                        <button onClick={authenticateUser} type="button" className="btn btn-primary btn-block mb-4">Войти</button>
+                        <div className="text-center">
+                            <button onClick={authenticateUser} type="button" className="btn btn-primary btn-block mb-4">Войти</button>
 
-                        <p>Нет аккаунта? <Link to="/register">Зарегистрироваться</Link></p>
-                    </div>
-                </form>
-            </CenteredBlock>
-        </Wrapper>
+                            <p>Нет аккаунта? <Link to="/register">Зарегистрироваться</Link></p>
+                        </div>
+                    </form>
+                </CenteredBlock>
+            </Body>
+            <Footer></Footer>
+        </BasePage>
     );
 }
 

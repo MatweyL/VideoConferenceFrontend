@@ -9,6 +9,10 @@ import NotFoundPage from "./NotFoundPage";
 import CreateConferenceForm from "./components/CreateConferenceForm";
 import ConferencesList from "./components/ConferencesList";
 import conferencesList from "./components/ConferencesList";
+import Header from "../layouts/Header";
+import Footer from "../layouts/Footer";
+import Body from "../layouts/Body";
+import BasePage from "../layouts/BasePage";
 
 const ConferenceMenu = (props) => {
     const pageTitle = `Конференции`;
@@ -21,6 +25,12 @@ const ConferenceMenu = (props) => {
             }
             else {
                 console.log(r);
+                r.sort((a, b) => {
+                    if (a.conference.created < b.constructor.created) {
+                        return -1;
+                    }
+                    return 1;
+                })
                 setUserConferences(r);
 
             }
@@ -29,12 +39,20 @@ const ConferenceMenu = (props) => {
     if (isError) {
         return (<NotFoundPage reason="Отказано в доступе"></NotFoundPage>);
     }
+
+    function addConference(conference) {
+        setUserConferences([{conference: conference, participants: []}, ...userConferences])
+    }
     return (
-        <Wrapper>
-            <PageTitle title={pageTitle}/>
-            <CreateConferenceForm></CreateConferenceForm>
-            <ConferencesList conferencesFull={userConferences}></ConferencesList>
-        </Wrapper>
+        <BasePage>
+            <Header></Header>
+            <Body>
+                <PageTitle title={pageTitle}/>
+                <CreateConferenceForm addConference={addConference}></CreateConferenceForm>
+                <ConferencesList conferencesFull={userConferences}></ConferencesList>
+            </Body>
+            <Footer></Footer>
+        </BasePage>
     );
 }
 
