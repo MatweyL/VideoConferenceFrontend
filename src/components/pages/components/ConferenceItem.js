@@ -6,7 +6,7 @@ const ConferenceItem = ({conferenceFull, ...props}) => {
     const participants = conferenceFull.participants
     const conferenceUrl = `/conferences/${conference.id}`
     const [verboseParticipants, setVerboseParticipants] = useState([]);
-    useEffect()
+
     return (
         <div className="border mt-3">
                 <div className="col p-3 bg-light border-bottom text-center">

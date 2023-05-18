@@ -48,15 +48,31 @@
     height: 344px;
 }
 
+@media (min-width: 600px) and (max-width: 1000px) {
+    .video {
+        width: auto;
+        height: 280px;
+    }
+}
+
+
+
+@media (max-width: 600px) {
+    .video {
+        width: auto;
+        height: 140px;
+    }
+}
+
+
 #local_vid {
     border: 1px solid green;
 }
 
-.conference-commands-bar {
-    position: fixed;
-    z-index: 100;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 80px;
+
+
+.conference-actions {
+    background-color: #2A2A2A;
+    border: 1px dashed green;
+
 }
