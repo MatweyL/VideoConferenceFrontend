@@ -1,6 +1,6 @@
 import React from "react";
 
-const LabeledInput = ({type, placeholder, inputLabel, value, readOnly, onChangeHandler, ...props}) => {
+const LabeledInput = ({type, placeholder, inputLabel, value, readOnly = false, onChangeHandler, ...props}) => {
 
     return (
         <div className="input col-md-12">

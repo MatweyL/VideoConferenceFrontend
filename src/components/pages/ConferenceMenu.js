@@ -26,10 +26,10 @@ const ConferenceMenu = (props) => {
             else {
                 console.log(r);
                 r.sort((a, b) => {
-                    if (a.conference.created < b.constructor.created) {
-                        return -1;
+                    if (a.conference.created < b.conference.created) {
+                        return 1;
                     }
-                    return 1;
+                    return -1;
                 })
                 setUserConferences(r);
 

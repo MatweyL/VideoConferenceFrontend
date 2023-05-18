@@ -45,6 +45,27 @@ const updateUser = (user) => {
         });
 };
 
+function getUser(user_id) {
+    return fetch(`${API_URL}/users/`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": getToken()
+        },
+    }).then(r => {
+        if (r.status !== 200) {
+            return getAPIError(r.status);
+        }
+        return r.json().then(data => {
+            console.log("data" + data);
+
+            return data;
+        })
+    }).catch(err => {
+        console.log("error" + err);
+        return err;
+    })
+}
 
 module.exports = {
     getCurrentUser,
