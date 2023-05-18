@@ -1,16 +1,37 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import CenteredBlock from "../base/CenteredBlock";
 import Wrapper from "../base/Wrapper";
 import PageTitle from "../base/PageTitle";
 import LabeledInput from "../base/LabeledInput";
 import ReadOnlyInput from "../base/ReadOnlyInput";
+import {getCurrentUser, getUser, updateUser} from "../../services/user";
+import NotFoundPage from "./NotFoundPage";
 
 const Profile = (props) => {
     const pageTitle = `Профиль`;
+    let [isError, setIsError] = useState(false);
+    let [username, setUsername] = useState();
     let [firstName, setFirstName] = useState();
     let [lastName, setLastName] = useState();
     let [readOnlyMode, setReadOnlyMode] = useState(true);
 
+    useEffect(() => {
+        getCurrentUser().then((data) => {
+            if (data.error) {
+                setIsError(true);
+            } else {
+                setUsername(data.user.username);
+                setFirstName(data.user_info.first_name);
+                setLastName(data.user_info.last_name);
+            }
+        })
+
+
+     }, []);
+
+    if (isError) {
+        return (<NotFoundPage reason="Отказано в доступе"></NotFoundPage>);
+    }
     function updateFirstName(event) {
         setFirstName(event.target.value);
     }
@@ -24,6 +45,7 @@ const Profile = (props) => {
     }
     function saveUpdateProfile() {
         setReadOnlyMode(true);
+        updateUser({first_name: firstName, last_name: lastName}).then(r => {})
 
     }
 
@@ -33,9 +55,9 @@ const Profile = (props) => {
             <CenteredBlock>
                 <div className="border">
                     <div className="col p-3">
-                        <ReadOnlyInput title="Username" value="user"/>
-                        <LabeledInput inputLabel="Имя" readOnly={readOnlyMode} onChangeHandler={updateFirstName}/>
-                        <LabeledInput inputLabel="Фамилия" readOnly={readOnlyMode} onChangeHandler={updateLastName}/>
+                        <ReadOnlyInput title="Username" value={username}/>
+                        <LabeledInput inputLabel="Имя" readOnly={readOnlyMode} onChangeHandler={updateFirstName} value={firstName}/>
+                        <LabeledInput inputLabel="Фамилия" readOnly={readOnlyMode} onChangeHandler={updateLastName} value={lastName}/>
                         <CenteredBlock>
                             {readOnlyMode ?
                                 <button onClick={enableUpdateProfile} className="btn btn-primary m-4" type="button">Редактировать</button>
