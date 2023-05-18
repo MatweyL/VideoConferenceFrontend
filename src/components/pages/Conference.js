@@ -2,9 +2,6 @@ import React from 'react';
 import Wrapper from "../base/Wrapper";
 
 const Conference = (props) => {
-    props.setFullWidthMode(true);
-    props.setHideFooterMode(true);
-    props.setHideHeaderMode(true);
     return (
         <Wrapper>
             <div id="video_grid" className="video-grid">

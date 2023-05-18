@@ -12,8 +12,6 @@ const GuestRoutes = (props) => {
                 <Route path="/" element={<Main/>}></Route>
                 <Route path="/login" element={<Login/>}></Route>
                 <Route path="/register" element={<Register/>}/>
-                <Route path="/profile" element={<Profile/>}></Route>
-                <Route path="/conferences" element={<ConferenceMenu/>}></Route>
             </Routes>);
 }
 

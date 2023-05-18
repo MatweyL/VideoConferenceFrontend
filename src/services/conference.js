@@ -24,6 +24,26 @@ const getCurrentUserConferences = () => {
 }
 
 
+const createConference = () => {
+    return fetch(`${API_URL}/conferences/`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": getToken()
+        },
+    }).then(r => {
+        if (r.status !== 201) {
+            return getAPIError(r.status);
+        }
+        return r.json().then(data => {
+            console.log("data" + data);
+            return data;
+        })
+    });
+}
+
+
 module.exports = {
-    getCurrentUserConferences
+    getCurrentUserConferences,
+    createConference
 };
