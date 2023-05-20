@@ -32,6 +32,9 @@ const Conference = (props) => {
     }, []);
     if (isError.error) {
         return <NotFoundPage></NotFoundPage>
+    } else {
+        return <NotFoundPage>Попробуйте обратиться к странице позже</NotFoundPage>
+
     }
 
     var myID;
