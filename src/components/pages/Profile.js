@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import CenteredBlock from "../base/CenteredBlock";
-import Wrapper from "../base/Wrapper";
 import PageTitle from "../base/PageTitle";
 import LabeledInput from "../base/LabeledInput";
 import ReadOnlyInput from "../base/ReadOnlyInput";

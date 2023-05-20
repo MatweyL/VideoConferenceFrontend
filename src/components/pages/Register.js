@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import CenteredBlock from "../base/CenteredBlock";
-import Wrapper from "../base/Wrapper";
 import PageTitle from "../base/PageTitle";
 import {Link} from "react-router-dom";
 import {registerUser} from "../../services/auth";

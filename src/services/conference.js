@@ -85,10 +85,30 @@ function finishConference(path_with_conference_id) {
     })
 }
 
+function changeConferenceJoinAccess(path_with_conference_id, isBlocked) {
+    let url = `${API_URL}${path_with_conference_id}/` + (isBlocked ? "allow_joining" : "prohibit_joining")
+    return fetch(url, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": getToken()
+                }
+            }).then(r => {
+                if (r.status !== 200) {
+                    return getAPIError(r.status);
+                }
+                return r.json().then(data => {
+                    console.log("data" + data);
+                    return data;
+                })
+    })
+}
+
 
 module.exports = {
     getCurrentUserConferences,
     createConference,
     getConference,
+    changeConferenceJoinAccess,
     finishConference
 };

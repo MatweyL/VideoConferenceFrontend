@@ -1,6 +1,7 @@
 import React, {useState} from "react";
 import {createConference} from "../../../services/conference";
 import LabeledInput from "../../base/LabeledInput";
+import CenteredBlock from "../../base/CenteredBlock";
 
 
 const CreateConferenceForm = ({addConference, ...props}) => {
@@ -17,8 +18,8 @@ const CreateConferenceForm = ({addConference, ...props}) => {
     }
     return (
         <div>
-            <LabeledInput type="text" onChangeHandler={e => setName(e.target.value)}></LabeledInput>
-            <button onClick={createAndEnter} className="">Создать</button>
+            <LabeledInput inputLabel="Название конференции" placeholder="Введите название конференции" type="text" onChangeHandler={e => setName(e.target.value)}></LabeledInput>
+            <CenteredBlock><button onClick={createAndEnter} className="btn btn-success mt-3">Создать</button></CenteredBlock>
         </div>
   )
 }

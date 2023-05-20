@@ -3,9 +3,6 @@ import {Route, Routes} from "react-router-dom";
 import Main from "../components/pages/Main";
 import Login from "../components/pages/Login";
 import Register from "../components/pages/Register";
-import Profile from "../components/pages/Profile";
-import Conference from "../components/pages/Conference";
-import ConferenceMenu from "../components/pages/ConferenceMenu";
 
 const GuestRoutes = (props) => {
     return (<Routes>

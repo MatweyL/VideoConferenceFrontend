@@ -1,3 +1,6 @@
+import * as conferenceTools from "./conferenceCommunicationUITools";
+
+
 var myID;
 var _peer_list = {};
 
@@ -23,10 +26,10 @@ function startCamera()
         .then((stream)=>{
             myVideo.srcObject = stream;
             camera_allowed = true;
-            setAudioMuteState(audioMuted);
-            setVideoMuteState(videoMuted);
+            // setAudioMuteState(audioMuted);
+            // setVideoMuteState(videoMuted);
             //start the socketio connection
-            socket.connect();
+            // socket.connect();
         })
         .catch((e)=>{
             console.log("getUserMedia Error! ", e);

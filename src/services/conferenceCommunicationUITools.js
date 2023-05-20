@@ -1,28 +1,12 @@
 var myVideo;
 let usersCount = 1;
 
-document.addEventListener("DOMContentLoaded", (event) => {
-    myVideo = document.getElementById("local_vid");
-    myVideo.onloadeddata = () => { console.log("W,H: ", myVideo.videoWidth, ", ", myVideo.videoHeight); };
-    // var muteBttn = document.getElementById("bttn_mute");
-    // var muteVidBttn = document.getElementById("bttn_vid_mute");
-    // var callEndBttn = document.getElementById("call_end");
-
-    // muteBttn.addEventListener("click", (event)=>{
-    //     audioMuted = !audioMuted;
-    //     setAudioMuteState(audioMuted);
-    // });
-    // muteVidBttn.addEventListener("click", (event)=>{
-    //     videoMuted = !videoMuted;
-    //     setVideoMuteState(videoMuted);
-    // });
-    // callEndBttn.addEventListener("click", (event)=>{
-    //     window.location.replace("/");
-    // });
-
-    // document.getElementById("room_link").innerHTML=`or the link: <span class="heading-mark">${window.location.href}</span>`;
-
-});
+function initMyVideo() {
+    document.addEventListener("DOMContentLoaded", (event) => {
+        myVideo = document.getElementById("local_vid");
+        myVideo.onloadeddata = () => { console.log("W,H: ", myVideo.videoWidth, ", ", myVideo.videoHeight); };
+    })
+}
 
 function makeVideoElementCustom(element_id, display_name) {
     let vid = document.createElement("video");
