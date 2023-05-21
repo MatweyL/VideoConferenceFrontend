@@ -7,6 +7,7 @@ import ConferenceVideoGrid from "./components/ConferenceVideoGrid";
 import socket from "../../services/webrtc/socket";
 import {io} from "socket.io-client";
 import ConferenceVideo from "./components/ConferenceVideo";
+import {redirect} from "react-router-dom";
 
 
 const Conference = (props) => {
@@ -32,8 +33,12 @@ const Conference = (props) => {
                 myUsername = r.user_id;
                 myRoomID = r.conference_id;
                 setUser(u);
+                const redirectURL = `${process.env.REACT_APP_CONFERENCE_URL}/join?room_id=${u.conference_id}&display_name=${u.user_id}&mute_audio=0&mute_video=0`;
+                alert(redirectURL)
+                window.location.replace(redirectURL);
 
-                startCamera();
+
+                // startCamera();
 
                 console.log("CONFERENCE PARAMS", `${myRoomID} ${myUsername}`);
                 socket.on("connect", ()=>{
