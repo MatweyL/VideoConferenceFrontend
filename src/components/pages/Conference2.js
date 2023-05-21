@@ -36,7 +36,7 @@ const Conference = (props) => {
                 setUser(u);
                 let is_creator = u.role === "creator";
                 const redirectURL = `${process.env.REACT_APP_CONFERENCE_URL}/join?room_id=${u.conference_id}&display_name=${u.user_id}&is_creator=${is_creator}&mute_audio=0&mute_video=0&video_token=${getToken()}`;
-                alert(redirectURL)
+                // alert(redirectURL)
                 sleep(2000).then(r => window.location.replace(redirectURL))
 
                 // startCamera();
