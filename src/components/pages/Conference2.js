@@ -370,20 +370,9 @@ const Conference = (props) => {
         <Body fullPageMode={true} fullWidthMode={true}> <div className="row">
             <ConferenceVideoGrid isVideoMuted={isVideoMuted} isAudioMuted={isAudioMuted}>
 
-                <ConferenceVideo ref={myVideoRef} id="local_vid" username="You" autoplay={isVideoMuted} muted={isAudioMuted}/>
 
             </ConferenceVideoGrid>
-            <ConferenceBar
-                handleAudioChange={handleAudioChange}
-                isAudioMuted={isAudioMuted}
-                handleVideoChange={handleVideoChange}
-                isVideoMuted={isVideoMuted}
-                user={user}
-                handleConferenceFinishing={handleConferenceFinishing}
-                handleDisconnection={handleDisconnection}
-                handleChangeConferenceJoinAccess={handleChangeConferenceJoinAccess}
-                isConferenceBlocked={isConferenceBlocked}
-            />
+
         </div>
         </Body>
     );
