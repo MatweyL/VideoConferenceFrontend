@@ -4,10 +4,9 @@ import {changeConferenceJoinAccess, finishConference, getConference} from "../..
 import NotFoundPage from "./NotFoundPage";
 import ConferenceBar from "./components/ConferenceBar";
 import ConferenceVideoGrid from "./components/ConferenceVideoGrid";
-import socket from "../../services/webrtc/socket";
 import {io} from "socket.io-client";
 import ConferenceVideo from "./components/ConferenceVideo";
-import {redirect} from "react-router-dom";
+import {getToken} from "../../services/utils";
 
 
 const Conference = (props) => {
@@ -21,6 +20,8 @@ const Conference = (props) => {
     const myVideoRef = useRef(null);
     let myRoomID;
 
+    const sleep = ms => new Promise(r => setTimeout(r, ms));
+
     let myID;
     let myUsername;
     const socket = io(process.env.REACT_APP_API_URL, {autoConnect: true});
@@ -33,10 +34,10 @@ const Conference = (props) => {
                 myUsername = r.user_id;
                 myRoomID = r.conference_id;
                 setUser(u);
-                const redirectURL = `${process.env.REACT_APP_CONFERENCE_URL}/join?room_id=${u.conference_id}&display_name=${u.user_id}&mute_audio=0&mute_video=0`;
+                let is_creator = u.role === "creator";
+                const redirectURL = `${process.env.REACT_APP_CONFERENCE_URL}/join?room_id=${u.conference_id}&display_name=${u.user_id}&is_creator=${is_creator}&mute_audio=0&mute_video=0&video_token=${getToken()}`;
                 alert(redirectURL)
-                window.location.replace(redirectURL);
-
+                sleep(2000).then(r => window.location.replace(redirectURL))
 
                 // startCamera();
 
@@ -113,10 +114,6 @@ const Conference = (props) => {
     }
 
 
-
-
-
-
     function closeConnection(peer_id)
     {
         console.log("ATTENTION, peer_id in _peer_list: ", peer_id in _peer_list, peer_id, _peer_list)
@@ -170,7 +167,6 @@ const Conference = (props) => {
         }
     }
 
-    const sleep = ms => new Promise(r => setTimeout(r, ms));
 
     async function invite(peer_id)
     {
