@@ -13,6 +13,7 @@ import Header from "../layouts/Header";
 import Footer from "../layouts/Footer";
 import Body from "../layouts/Body";
 import BasePage from "../layouts/BasePage";
+import {getCurrentUser} from "../../services/user";
 
 const ConferenceMenu = (props) => {
     const pageTitle = `Конференции`;

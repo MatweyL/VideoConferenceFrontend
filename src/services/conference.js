@@ -55,7 +55,6 @@ function getConference(path_with_conference_id) {
             return getAPIError(r.status);
         }
         return r.json().then(data => {
-            console.log("data" + data);
             return data;
         })
     }).catch(err => {

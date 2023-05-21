@@ -6,51 +6,84 @@ import ConferenceBar from "./components/ConferenceBar";
 import ConferenceVideoGrid from "./components/ConferenceVideoGrid";
 import socket from "../../services/webrtc/socket";
 import {io} from "socket.io-client";
+import ConferenceVideo from "./components/ConferenceVideo";
+
 
 const Conference = (props) => {
     const [isError, setIsError] = useState({error: false});
     const [user, setUser] = useState({});
-    const [name, setName] = useState('');
     const [isVideoMuted, setIsVideoMuted] = useState(false);
     const [isAudioMuted, setIsAudioMuted] = useState(false);
-    const [myRoomID, setMyRoomID] = useState('');
-    const myVideoRef = useRef();
+    const [isConferenceBlocked, setIsConferenceBlocked] = useState(false);
 
+
+    const myVideoRef = useRef(null);
+    let myRoomID;
+
+    let myID;
+    let myUsername;
+    const socket = io(process.env.REACT_APP_API_URL, {autoConnect: true});
     useEffect(() => {
         getConference(document.location.pathname).then(r => {
-            console.log(r)
             if (r.error) {
                 setIsError(r);
             } else {
                 const u = r;
-                setName(r.user_id)
-                setMyRoomID(document.location.pathname);
+                myUsername = r.user_id;
+                myRoomID = r.conference_id;
                 setUser(u);
 
+                startCamera();
+
+                console.log("CONFERENCE PARAMS", `${myRoomID} ${myUsername}`);
+                socket.on("connect", ()=>{
+                    console.log("socket connected....", myRoomID);
+                    socket.emit("join-room", {
+                        "room_id": myRoomID,
+                        "name": myUsername
+                    });
+                });
+                socket.on("user-connect", (data)=>{
+                    console.log("user-connect ", data);
+                    let peer_id = data["sid"];
+                    let display_name = data["name"];
+                    _peer_list[peer_id] = undefined; // add new user to user list
+                    addVideoElement(peer_id, display_name);
+                });
+                socket.on("user-disconnect", (data)=>{
+                    console.log("user-disconnect ", data);
+                    let peer_id = data["sid"];
+                    closeConnection(peer_id);
+                    removeVideoElement(peer_id);
+                });
+                socket.on("user-list", (data)=>{
+                    console.log("user list recvd ", data);
+                    myID = data["my_id"];
+                    if( "list" in data) // not the first to connect to room, existing user list recieved
+                    {
+                        let recvd_list = data["list"];
+                        // add existing users to user list
+                        if (recvd_list) {
+                            Array.of(recvd_list).forEach(peer_id => {
+                                let display_name = recvd_list[peer_id];
+                                _peer_list[peer_id] = undefined;
+                                addVideoElement(peer_id, display_name);
+                            });
+                        }
+                        start_webrtc();
+                    }
+                });
             }
         });
     }, []);
+
     if (isError.error) {
         return <NotFoundPage></NotFoundPage>
-    } else {
-        return <NotFoundPage>Попробуйте обратиться к странице позже</NotFoundPage>
-
     }
 
-    var myID;
     var _peer_list = {};
 
     var myVideo;
-
-// socketio
-    var socket = io(process.env.REACT_APP_API_URL, {autoConnect: true});
-
-    document.addEventListener("DOMContentLoaded", (event)=>{
-        myVideo = document.getElementById("local_vid");
-        console.log("FOUND ", myVideo);
-        startCamera();
-
-    });
 
     var camera_allowed=false;
     var mediaConstraints = {
@@ -64,14 +97,9 @@ const Conference = (props) => {
     {
         navigator.mediaDevices.getUserMedia(mediaConstraints)
             .then((stream)=>{
-                console.log("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB")
-                myVideo = myVideoRef.current;
-                myVideo.srcObject = stream;
+                myVideoRef.current.srcObject = stream;
+                console.log(stream);
                 camera_allowed = true;
-                console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
-                // setAudioMuteState(isAudioMuted);
-                // setVideoMuteState(isVideoMuted);
-                //start the socketio connection
                 socket.connect();
             })
             .catch((e)=>{
@@ -79,45 +107,10 @@ const Conference = (props) => {
             });
     }
 
-    socket.on("connect", ()=>{
-        if (name) {
-            console.log("socket connected....", name);
-            socket.emit("join-room", {
-                "room_id": window.location.pathname,
-                "name": name
-            });
-        }
-    });
-    socket.on("user-connect", (data)=>{
-        console.log("user-connect ", data);
-        let peer_id = data["sid"];
-        let display_name = data["name"];
-        _peer_list[peer_id] = undefined; // add new user to user list
-        addVideoElement(peer_id, display_name);
-    });
-    socket.on("user-disconnect", (data)=>{
-        console.log("user-disconnect ", data);
-        let peer_id = data["sid"];
-        closeConnection(peer_id);
-        removeVideoElement(peer_id);
-    });
-    socket.on("user-list", (data)=>{
-        console.log("user list recvd ", data);
-        let myID = data["my_id"];
-        if( "list" in data) // not the first to connect to room, existing user list recieved
-        {
-            let recvd_list = data["list"];
-            // add existing users to user list
-            if (recvd_list) {
-                Array.of(recvd_list).forEach(peer_id => {
-                    let display_name = recvd_list[peer_id];
-                    _peer_list[peer_id] = undefined;
-                    addVideoElement(peer_id, display_name);
-                });
-            }
-            start_webrtc();
-        }
-    });
+
+
+
+
 
     function closeConnection(peer_id)
     {
@@ -132,14 +125,6 @@ const Conference = (props) => {
         }
     }
 
-    function log_user_list()
-    {
-        for(let key in _peer_list)
-        {
-            console.log(`${key}: ${_peer_list[key]}`);
-        }
-    }
-
 //---------------[ webrtc ]--------------------
 
     var PC_CONFIG = {
@@ -147,9 +132,7 @@ const Conference = (props) => {
             {
                 urls: ['stun:stun.l.google.com:19302',
                     'stun:stun1.l.google.com:19302',
-                    'stun:stun2.l.google.com:19302',
-                    'stun:stun3.l.google.com:19302',
-                    'stun:stun4.l.google.com:19302'
+                    'stun:stun2.l.google.com:19302'
                 ]
             },
         ]
@@ -193,11 +176,18 @@ const Conference = (props) => {
             console.log(`Creating peer connection for <${peer_id}> ...`);
             createPeerConnection(peer_id);
             await sleep(2000);
-            myVideo = myVideoRef.current;
-            let local_stream = myVideo.srcObject;
-            console.log(myVideo.srcObject);
-            local_stream.getTracks().forEach((track)=>{_peer_list[peer_id].addTrack(track, local_stream);});
-            console.log(myVideo.srcObject);
+
+            let local_stream = myVideoRef.current.srcObject;
+            if (local_stream) {
+                local_stream.getTracks().forEach((track) => {
+                    try {
+                        _peer_list[peer_id].addTrack(track, local_stream);
+                    } catch (e) {
+                        console.log(e)
+                    }
+                });
+            }
+
         }
     }
 
@@ -237,7 +227,7 @@ const Conference = (props) => {
         let desc = new RTCSessionDescription(msg['sdp']);
         _peer_list[peer_id].setRemoteDescription(desc)
             .then(()=>{
-                let local_stream = myVideo.srcObject;
+                let local_stream = myVideoRef.current.srcObject;
                 local_stream.getTracks().forEach((track)=>{_peer_list[peer_id].addTrack(track, local_stream);});
             })
             .then(()=>{return _peer_list[peer_id].createAnswer();})
@@ -295,12 +285,12 @@ const Conference = (props) => {
     }
 
 
-
-    document.addEventListener("DOMContentLoaded", (event) => {
-        myVideo = document.getElementById("local_vid");
-        myVideo.onloadeddata = () => { console.log("W,H: ", myVideo.videoWidth, ", ", myVideo.videoHeight); };
-
-    });
+    //
+    // document.addEventListener("DOMContentLoaded", (event) => {
+    //     myVideo = document.getElementById("local_vid");
+    //     myVideo.onloadeddata = () => { console.log("W,H: ", myVideo.videoWidth, ", ", myVideo.videoHeight); };
+    //
+    // });
 
     function makeVideoElementCustom(element_id, display_name) {
         let vid = document.createElement("video");
@@ -310,8 +300,9 @@ const Conference = (props) => {
     }
 
     function addVideoElement(element_id, display_name) {
-        document.getElementById("video_grid").appendChild(makeVideoElementCustom(element_id, display_name));
-    }
+        if (display_name) {
+            document.getElementById("video_grid").appendChild(makeVideoElementCustom(element_id, display_name));
+        }}
     function removeVideoElement(element_id) {
         let v = getVideoObj(element_id);
         if (!v) {
@@ -331,42 +322,68 @@ const Conference = (props) => {
     }
 
     function setAudioMuteState(flag) {
-        let local_stream = myVideo.srcObject;
+        let local_stream = myVideoRef.current.srcObject;
         console.log("setAudioMuteState: ", local_stream);
         local_stream.getAudioTracks().forEach((track) => { track.enabled = !flag; });
         // switch button icon
         document.getElementById("mute_icon").innerText = (flag) ? "mic_off" : "mic";
     }
     function setVideoMuteState(flag) {
-        let local_stream = myVideo.srcObject;
+        let local_stream = myVideoRef.current.srcObject;
         local_stream.getVideoTracks().forEach((track) => { track.enabled = !flag; });
         // switch button icon
         document.getElementById("vid_mute_icon").innerText = (flag) ? "videocam_off" : "videocam";
     }
 
+    function handleConferenceFinishing() {
+        finishConference(document.location.pathname).then(r => {
+            window.location.replace("/conferences");
+        })
+    }
 
+    function handleChangeConferenceJoinAccess() {
+        setIsConferenceBlocked(!isConferenceBlocked);
+        changeConferenceJoinAccess(document.location.pathname, isConferenceBlocked).then(
+            r => {
+                if (r.error) {
+                    alert("Ошибка")
+                }
+            }
+        )
+    }
 
+    function handleVideoChange() {
+        setIsVideoMuted(!isVideoMuted);
+    }
 
+    function handleAudioChange() {
+        setIsAudioMuted(!isAudioMuted);
 
+    }
 
-
-
-
-
-
-
-
-
-
-
-
-
+    function handleDisconnection() {
+        window.location.replace("/conferences");
+    }
 
     return (
-        <Body fullPageMode={true} fullWidthMode={true}>
-            <div id="video_grid" className="video-grid">
-                <video ref={myVideoRef} id="local_vid" autoPlay muted></video></div>
-            {/*<ConferenceVideoGrid isVideoMuted={isVideoMuted} isAudioMuted={isAudioMuted}/>*/}
+        <Body fullPageMode={true} fullWidthMode={true}> <div className="row">
+            <ConferenceVideoGrid isVideoMuted={isVideoMuted} isAudioMuted={isAudioMuted}>
+
+                <ConferenceVideo ref={myVideoRef} id="local_vid" username="You" autoplay={isVideoMuted} muted={isAudioMuted}/>
+
+            </ConferenceVideoGrid>
+            <ConferenceBar
+                handleAudioChange={handleAudioChange}
+                isAudioMuted={isAudioMuted}
+                handleVideoChange={handleVideoChange}
+                isVideoMuted={isVideoMuted}
+                user={user}
+                handleConferenceFinishing={handleConferenceFinishing}
+                handleDisconnection={handleDisconnection}
+                handleChangeConferenceJoinAccess={handleChangeConferenceJoinAccess}
+                isConferenceBlocked={isConferenceBlocked}
+            />
+        </div>
         </Body>
     );
 }

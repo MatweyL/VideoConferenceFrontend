@@ -6,7 +6,7 @@ const ConferenceItem = ({conferenceFull, ...props}) => {
     const participants = conferenceFull.participants
     const conferenceUrl = `/conferences/${conference.id}`
     const [verboseParticipants, setVerboseParticipants] = useState([]);
-
+    const conferenceURL = conferenceUrl; // `http://localhost:5001/join?room_id=${conference.id}&display_name=${Math.random()}`;
     return (
         <div className="border mt-3">
                 <div className="col p-3 bg-light border-bottom text-center">
@@ -17,7 +17,7 @@ const ConferenceItem = ({conferenceFull, ...props}) => {
                     <div className="col-4">
                         <div>
                             {conference.is_finished ? <span></span>:
-                            <Link to={conferenceUrl}>Ссылка</Link>}
+                            <Link to={conferenceURL}>Ссылка</Link>}
                         </div>
                         <div>Начата: {conference.created}</div>
                         <div>{conference.is_finished ?  <span>Завершена: {conference.finished}</span> : <span></span>}</div>
