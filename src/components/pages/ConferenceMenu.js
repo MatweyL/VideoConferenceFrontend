@@ -1,14 +1,9 @@
 import React, {useEffect, useState} from 'react';
-import CenteredBlock from "../base/CenteredBlock";
-import Wrapper from "../base/Wrapper";
 import PageTitle from "../base/PageTitle";
-import LabeledInput from "../base/LabeledInput";
-import ReadOnlyInput from "../base/ReadOnlyInput";
 import {getCurrentUserConferences} from "../../services/conference";
 import NotFoundPage from "./NotFoundPage";
 import CreateConferenceForm from "./components/CreateConferenceForm";
 import ConferencesList from "./components/ConferencesList";
-import conferencesList from "./components/ConferencesList";
 import Header from "../layouts/Header";
 import Footer from "../layouts/Footer";
 import Body from "../layouts/Body";
