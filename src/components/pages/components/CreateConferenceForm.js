@@ -8,6 +8,10 @@ const CreateConferenceForm = ({addConference, ...props}) => {
 
     const [name, setName] = useState();
     function createAndEnter() {
+        if (!name) {
+            alert("Название конференции не должно быть пустым!")
+            return;
+        }
         createConference({name: name}).then(r => {
             if (r.error) {
                 console.log("Ошибка");

@@ -6,7 +6,6 @@ import Register from "../components/pages/Register";
 import Profile from "../components/pages/Profile";
 import ConferenceMenu from "../components/pages/ConferenceMenu";
 import Conference from "../components/pages/Conference";
-import Conference2 from "../components/pages/Conference2";
 
 export const UserRoutes = () => {
     return (<Routes>
@@ -15,6 +14,6 @@ export const UserRoutes = () => {
         <Route path="/register" element={<Register/>}/>
         <Route path="/profile" element={<Profile/>}></Route>
         <Route path="/conferences" element={<ConferenceMenu/>}></Route>
-        <Route path="/conferences/:uid" element={<Conference2/>}></Route>
+        <Route path="/conferences/:uid" element={<Conference/>}></Route>
     </Routes>);
 };

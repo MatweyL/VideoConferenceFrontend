@@ -1,11 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import {Link} from "react-router-dom";
 
-const ConferenceItem = ({conferenceFull, ...props}) => {
+const ConferenceItem = ({conferenceFull, currentUser, ...props}) => {
     const conference = conferenceFull.conference;
     const participants = conferenceFull.participants
     const conferenceUrl = `/conferences/${conference.id}`
     const [verboseParticipants, setVerboseParticipants] = useState([]);
+    console.log("******************************", currentUser)
+    const isCreator = currentUser.user ? conferenceFull.conference.creator_id === currentUser.user.id : false;
     return (
         <div className="border mt-3">
                 <div className="col p-3 bg-light border-bottom text-center">
@@ -20,7 +22,7 @@ const ConferenceItem = ({conferenceFull, ...props}) => {
                         </div>
                         <div>Начата: {conference.created}</div>
                         <div>{conference.is_finished ?  <span>Завершена: {conference.finished}</span> : <span></span>}</div>
-
+                        <div>Вы: {isCreator ? <span className="text-success">Создатель</span> : <span  className="text-primary">Участник</span>}</div>
                     </div>
                     <div className="col-4">
                         {conference.is_finished ? <div className="text-danger">Завершена</div> : <div className="text-success">Активна</div>}

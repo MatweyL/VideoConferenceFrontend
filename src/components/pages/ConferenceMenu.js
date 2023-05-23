@@ -19,6 +19,7 @@ const ConferenceMenu = (props) => {
     const pageTitle = `Конференции`;
     const [isError, setIsError] = useState(false);
     const [userConferences, setUserConferences] = useState([])
+    const [currentUser, setCurrentUser] = useState({});
     useEffect(() => {
         getCurrentUserConferences().then(r => {
             if (r.error) {
@@ -35,7 +36,12 @@ const ConferenceMenu = (props) => {
                 setUserConferences(r);
 
             }
+        });
+        getCurrentUser().then(r => {
+            console.log("CURRENT USER:                            ", r)
+            setCurrentUser(r);
         })
+
     },[]);
     if (isError) {
         return (<NotFoundPage reason="Отказано в доступе"></NotFoundPage>);
@@ -50,7 +56,7 @@ const ConferenceMenu = (props) => {
             <Body>
                 <PageTitle title={pageTitle}/>
                 <CreateConferenceForm addConference={addConference}></CreateConferenceForm>
-                <ConferencesList conferencesFull={userConferences}></ConferencesList>
+                <ConferencesList conferencesFull={userConferences} currentUser={currentUser}></ConferencesList>
             </Body>
             <Footer></Footer>
         </BasePage>
